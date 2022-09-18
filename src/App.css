@@ -1,0 +1,50 @@
+.mainContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items : center;
+  flex-direction : column;
+  margin-bottom : 64px;
+}
+
+.dataContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top : 64px;
+  margin-bottom : 64px;
+
+}
+.header {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.bio {
+   object-fit : contain;
+  overflow : hidden;
+  text-align: center;
+  color: #E59560;
+  margin-top: 16px;
+  margin-bottom : 16px;
+}
+
+input{
+  border : 1px solid;
+  border-radius  : 10px;
+  height : 40px;
+  margin-top : 20px;
+  margin-bottom : 20px;
+}
+.waveButton {
+  cursor: pointer;
+  margin-top: 16px;
+  margin-bottom : 16px;
+  padding: 8px;
+  border: 0;
+  height : 50px;
+  border-radius: 10px;
+  background : #1D3124;
+  color : white;
+}
