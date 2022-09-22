@@ -1,14 +1,17 @@
-import React, {useEffect,useState} from "react";
+import React, {useEffect,useState,useRef} from "react";
 import { ethers } from "ethers";
 import './App.css';
 import abi from "./utils/WavePortalABI.json";
-
+import kid1 from "./utils/kid-hi.jpg";
+import kid2 from "./utils/kid-real.jpg";
   const App = () => {
-
+    const ref = useRef();
     const [currentAccount, setCurrentAccount] = useState("");
     const [totalWaves, setTotalWaves] = useState("");
     const [loading, setLoading] = useState("");
-    const contractAddress = "0xDF4cc04284CB6502D74764B08c50D9025972A6a7";
+    const [allWaves, setAllWaves] = useState([]);
+    const [msg, setMsg] = useState("");
+    const contractAddress = "0xce95F5955c68C7B040503a90daa85FE4A46cb634";
     const contractABI = abi.abi;
     const date = new Date();
 
@@ -56,9 +59,14 @@ import abi from "./utils/WavePortalABI.json";
       }
     }
 
-    const wave = async ( msg) => {
+    const wave = async () => {
+      if(!currentAccount){
+        alert("Connect your wallet first!!!");
+        return;
+      }
       setLoading(" ");
       const {ethereum} = window;
+      
       if(ethereum){
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -69,12 +77,7 @@ import abi from "./utils/WavePortalABI.json";
         
         await waveTxn.wait();
         console.log("Mined ... :", waveTxn.hash);
-
-        let count = await wavePortalContract.getTotalWaves();
         setLoading("");
-        // sleep(0.1);
-        setTotalWaves(count.toNumber());
-        console.log("Total waves are  : ", totalWaves);
         }
         catch(error){
           setLoading("");
@@ -86,9 +89,14 @@ import abi from "./utils/WavePortalABI.json";
       }
   }
   const getWaveCount = async () => {
+    if(!currentAccount){
+        alert("Connect your wallet first!!!");
+       return;
+      }
       setLoading(" ");
       setTotalWaves("");
       const {ethereum} = window;
+     
       if(ethereum){
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
@@ -103,16 +111,53 @@ import abi from "./utils/WavePortalABI.json";
         console.log("Ethereum obj doesnt exist");
       }
   }
+
+
+  const getAllWaves = async () => {
+    if(!currentAccount){
+        alert("Connect your wallet first!!!");
+      return;
+      }
+      setLoading(" ");
+      setTotalWaves("");
+      const {ethereum} = window;
+    
+      if(ethereum){
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress,contractABI,signer); 
+        let waves = await wavePortalContract.getAllWaves();
+        setLoading("");
+
+        let wavesCleaned = [];
+        waves.forEach(wave => {
+          wavesCleaned.push({
+            address : wave.waver,
+            data : wave.data,
+            timestamp : new Date(wave.timestamp*1000),
+          })
+        })
+        setAllWaves(wavesCleaned);
+        await ref.current.scrollIntoView({ behavior: "smooth" });
+      }
+      else{
+        console.log("Ethereum obj doesnt exist");
+      }
+  }
+  
   useEffect(()=>{
     checkIfWalletIsConnected();
   },[])
   
   return (
+
     <div className="mainContainer">
       { loading &&
         <div className="dataContainer">
+          <div className="bio">
         <p>Mining on Ethereum.... In progress</p>
         <progress value="37" max ="99"></progress>
+        </div>
         </div>
           
       }
@@ -120,34 +165,76 @@ import abi from "./utils/WavePortalABI.json";
       <div className="dataContainer">
         <div className="header">
           Total waves are ... {totalWaves}
+          </div>
+        <div className="bio">
+        <button className="waveButton" onClick={()=>setTotalWaves("")}>
+        Clear</button>
         </div>
+          
       </div>
       }
       <div className="dataContainer">
         <div className="header">
-        Chotta Bheem Here!!
+        <img src={kid1} />
+          
+        Chotta Bheem Here! Say Hii
+        <img src={kid2} />
+          
         </div>
         <div className="bio">
         Just write what you think about me..
         </div>
-        
-        <input type="text"></input>
-        <button className="waveButton" onClick={wave}>
-          Send Message
+      </div>
+        <div className="bio">
+        <input onChange={()=>{setMsg(event.target.value);}} type="text" placeholder="Write sth abt me.."></input>
+        </div>
+      <div>
+        <div className="bio">
+        <button className="waveButton" onClick={()=>{wave();}}>
+        Send Message
         </button>
-        
+          </div>
+        <div className="bio">
         { !currentAccount && (
+      
           <button className="waveButton" onClick={connectWallet}>
             Connect Wallet.
           </button>
         )}
-
          <button className="waveButton" onClick={getWaveCount}>
           Get Total Waves
         </button>
-      </div>
+        <button className="waveButton" onClick={getAllWaves} href="#messages">
+          Previous Waves
+        </button>
+
+          </div>
+        </div>
       
-    </div>
+
+      <div className=" messageLIst" id="messages" ref={ref}>
+        {!!allWaves.length && <h1>What everyone has written about me .. </h1>}
+             {allWaves.map((wave,index)=> {
+          return (
+          <div  key={index} className="message">
+            <ul>
+              <li> <em>Address</em> : {wave.address}</li>
+              <li> <em>Message</em> : {wave.data}</li>
+              <li> <em>Time</em> : {wave.timestamp.toString()}</li>
+            </ul>
+          </div>
+          )
+        })
+        }
+        </div>
+      {!!allWaves.length && <div className="bio">
+        <button className="waveButton" onClick={()=>setAllWaves([])}>
+        Clear</button>
+        </div>
+      }
+      </div>
   );
-}
+      }
+      
 export default App
+x 
