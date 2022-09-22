@@ -1,50 +1,71 @@
+body{
+  font-size : 16px;
+}
 .mainContainer {
   display: flex;
-  justify-content: center;
-  width: 100%;
-  align-items : center;
+/*   justify-content: center; */
   flex-direction : column;
-  margin-bottom : 64px;
+  margin-bottom : 1.25rem;
 }
 
 .dataContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction : column;
   justify-content: center;
-  margin-top : 64px;
-  margin-bottom : 64px;
+  margin-top : 2rem;
+  margin-bottom : 1.25rem;
 
 }
 .header {
   text-align: center;
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: 600;
 }
 
 .bio {
-   object-fit : contain;
-  overflow : hidden;
-  text-align: center;
+  direction : flex;
+  flex-direction : column;
+  text-align: center;  
   color: #E59560;
-  margin-top: 16px;
-  margin-bottom : 16px;
 }
 
 input{
   border : 1px solid;
-  border-radius  : 10px;
-  height : 40px;
-  margin-top : 20px;
-  margin-bottom : 20px;
+  border-radius  : 0.6rem;
+  height : 2.5rem;
+  margin-top : 1.25rem;
+  margin-bottom : 0.6rem;
+  width : 32rem;
+  
 }
 .waveButton {
-  cursor: pointer;
-  margin-top: 16px;
-  margin-bottom : 16px;
+  margin: 5px 20px 20px 20px;
   padding: 8px;
   border: 0;
-  height : 50px;
-  border-radius: 10px;
+  height : 3rem;
+  border-radius: 0.6rem;
   background : #1D3124;
   color : white;
+  align : center;
+  width : 18rem;
+}
+
+img{
+  border-radius :50%;
+  height : 12rem;
+  width : 16rem;
+  align : center;
+}
+
+.messageList{
+  display : flex;
+  justify-center : space-evenly;
+}
+.message{
+  margin : 0.6rem;
+  background : #E59560;
+  border-radius : 10px;
+  font-size : 18px;
+  color : #1D3124;
+  align-content : center;
 }
